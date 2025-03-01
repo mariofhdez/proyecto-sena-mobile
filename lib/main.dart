@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sena_mobile/screens/create_employee_screen.dart';
+import 'package:sena_mobile/screens/employees_screen.dart';
 import 'package:sena_mobile/screens/home_screen.dart';
+
+import 'providers/employee_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,16 +15,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sistema de Gestión de Nómina',
-      home: HomeScreen(),
-      routes:{
-        '/create-employee': (context) => const CreateEmployeeScreen(),
-      }
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => EmployeeProvider())],
+      child: MaterialApp(
+        title: 'Sistema de Gestión de Nómina',
+        home: HomeScreen(),
+        routes: {
+          '/create-employee': (context) => const CreateEmployeeScreen(),
+          '/retrieve-employees': (context) => EmployeesScreen(),
+        },
+      ),
     );
   }
 }
-
 
 // class MyApp extends StatelessWidget {
 //   const MyApp({super.key});
