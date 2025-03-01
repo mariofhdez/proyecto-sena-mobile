@@ -1,66 +1,67 @@
 import 'package:flutter/material.dart';
 
-const List<String> employeesOptions = <String>[
-  'Ver empleados',
-  'Crear empleado',
-];
-const List<String> newsOptions = <String>['Ver novedades', 'Crear novedad'];
-const List<String> payrollsOptions = <String>[
-  'Consultar nóminas',
-  'Crear nómina',
-];
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<bool> _isExpanded = [false, false, false];
+
+  @override
+  Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(title: Text('Sistema de gestión de nómina')),
+      appBar: AppBar(title: Text("Sistema de Gestión de Nómina"),),
       drawer: Drawer(
-        // backgroundColor: ,
         child: ListView(
           children: [
-            // DrawerHeader(child: Text('Menú')),
-            DropdownButtonEmployees(),
-            ListTile(title: Text('Empleados')),
-            ListTile(title: Text('Novedades')),
-            ListTile(title: Text('Nóminas')),
+            ExpansionPanelList(
+              expansionCallback: (index, isExpanded) {
+                setState(() {
+                  _isExpanded[index] = isExpanded;
+                });
+              },
+              children: [
+                _buildExpansionPanel(
+                  index: 0,
+                  title: "Empleados",
+                  options: ["Crear empleado", "Ver empleados"]
+                ),
+                _buildExpansionPanel(
+                  index: 1,
+                  title: "Novedades",
+                  options: ["Crear novedad", "Ver novedades"]
+                ),
+                _buildExpansionPanel(
+                  index: 2,
+                  title: "Nómina",
+                  options: ["Crear nómina", "Ver nóminas"]
+                ),
+              ],
+            )
           ],
         ),
       ),
+      body: Center(child: Text("Contenido principal")),
     );
   }
-}
 
-class DropdownButtonEmployees extends StatefulWidget {
-  const DropdownButtonEmployees({super.key});
-
-  @override
-  State<DropdownButtonEmployees> createState() =>
-      _DropdownButtonEmployeesState();
-}
-
-class _DropdownButtonEmployeesState extends State<DropdownButtonEmployees> {
-  String dropdownValue = employeesOptions.first;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(height: 2, color: Colors.deepPurpleAccent),
-      items:
-          employeesOptions.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(value: value, child: Text(value));
-          }).toList(),
-      onChanged: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-        });
+  ExpansionPanel _buildExpansionPanel({required int index, required String title, required List<String> options}){
+    return ExpansionPanel(
+      headerBuilder: (context, isExpanded){
+        return ListTile(title: Text(title),);
       },
+      body: Column(
+        children: options.map((option) {
+          return ListTile(
+            title: Text(option),
+            // onTap,
+          );
+        }).toList(),
+      ),
+    isExpanded: _isExpanded[index],
     );
   }
 }
