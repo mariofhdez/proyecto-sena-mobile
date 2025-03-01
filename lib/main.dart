@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sena_mobile/screens/homeScreen.dart';
+import 'package:sena_mobile/screens/create_employee_screen.dart';
+import 'package:sena_mobile/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +14,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Sistema de Gestión de Nómina',
       home: HomeScreen(),
-      // routes:{
-      //   '/': (context) => const HomeScreen(),
-      // }
+      routes:{
+        '/create-employee': (context) => const CreateEmployeeScreen(),
+      }
     );
   }
 }
